@@ -1,11 +1,12 @@
-﻿using OA.Result.Results;
+﻿namespace OA.Result.Results;
 
-namespace OA.Result;
-
+/// <summary>
+///     Provides extension methods for working with <see cref="Result" /> objects.
+/// </summary>
 public static class ResultExtensions
 {
     // Non-generic flow
-    public static Results.Result Tap(this Results.Result result, Action action)
+    public static Result Tap(this Result result, Action action)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(action);
@@ -14,7 +15,7 @@ public static class ResultExtensions
         return result;
     }
 
-    public static Results.Result TapError(this Results.Result result, Action<IReadOnlyList<Error>> action)
+    public static Result TapError(this Result result, Action<IReadOnlyList<Error>> action)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(action);
@@ -23,14 +24,14 @@ public static class ResultExtensions
         return result;
     }
 
-    public static Results.Result Ensure(this Results.Result result, Func<bool> predicate, Error errorIfFalse)
+    public static Result Ensure(this Result result, Func<bool> predicate, Error errorIfFalse)
     {
         ArgumentNullException.ThrowIfNull(result);
         ArgumentNullException.ThrowIfNull(predicate);
         ArgumentNullException.ThrowIfNull(errorIfFalse);
 
         if (result.IsFailure) return result;
-        return predicate() ? result : Results.Result.Fail(errorIfFalse);
+        return predicate() ? result : Result.Fail(errorIfFalse);
     }
 
     // Generic flow
@@ -93,7 +94,7 @@ public static class ResultExtensions
     }
 
     public static TResult Match<TResult>(
-        this Results.Result result,
+        this Result result,
         Func<TResult> onSuccess,
         Func<IReadOnlyList<Error>, TResult> onFailure)
     {
